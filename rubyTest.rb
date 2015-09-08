@@ -279,7 +279,7 @@ puts "2".to_sym
 # \t  Tab
 # \v  Vertical tab
 
-=end
 
+=end
 
 # ----- Classes / Object / Inh -----
