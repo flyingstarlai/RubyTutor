@@ -37,3 +37,10 @@ puts x.sub(/..$/, 'Hello')
 
 "zyz".scan(/./) {|letter| puts letter}
 
+"The car costs $1000 and the cat costs $10".scan(/\d+/) {|c| puts c }
+"This is a test".scan(/[a-m]/) { |x1| puts x1 }
+
+puts "String has vowels" if "This is a test" =~ /[aeiou]/
+puts "String contains no digits" unless "This is a test" =~ /[0-9]/
+puts "String has vowels" if "This is a test".match(/[aeiou]/)
+
