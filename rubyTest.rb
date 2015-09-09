@@ -280,6 +280,342 @@ puts "2".to_sym
 # \v  Vertical tab
 
 
-=end
 
 # ----- Classes / Object / Inh -----
+
+class Animal
+  
+  def initialize
+    puts "Creating a new animal"
+  end
+  
+  def set_name(new_name)
+    #set value for an instance var
+    @name = new_name
+  end
+  
+  def get_name
+    @name
+  end
+  
+  #provides another way to set value
+  def name=(new_name)
+    #eliminate bad input
+    if new_name.is_a?(Numeric)
+      puts "Name can't be a number bitch!"
+    else
+      @name = new_name
+    end
+  end
+  
+  #provides another way to get value
+  def name
+    @name
+  end
+end
+
+
+#create a new animal object
+cat = Animal.new
+
+#set the animal name
+cat.set_name("Pikachu")
+
+#get_name return
+puts cat.get_name
+
+#using alternative way to set name
+cat.name = "Bakada"
+
+#using alternative way to get name
+puts cat.name
+
+class Dog
+  #shortcut for creating getter func
+  attr_reader :name, :height, :weight
+  
+  #shortcut for creating setter func
+  attr_writer :name, :heightm, :weight
+  
+  #setter and getter func
+  attr_accessor :name, :height, :weight
+  
+  def bark
+    return "generic bark.."
+  end
+end
+
+rover = Dog.new
+rover.name = "Rover"
+puts rover.name
+puts rover.bark
+
+#inheritance..
+
+class GermanShepard < Dog
+  #just overwrite method 
+  def bark
+    return "loud bark..."
+  end
+end
+
+max = GermanShepard.new
+max.name = "Max"
+printf "%s goes %s \n", max.name, max.bark
+
+# ---- Module ----- 
+require_relative "human"
+require_relative "smart"
+
+module Animal
+  def make_sound
+    puts "Grrrr.."
+  end
+end
+
+#inherit module method with include / prepend
+
+class Dog
+  include Animal
+end
+
+rover = Dog.new
+rover.make_sound
+
+class Scientist
+  include Human
+  prepend Smart #any method in smart will superseed here
+  
+  def act_smart
+    return "E = fucking bitch slap!"
+  end
+end
+
+einstein = Scientist.new
+einstein.name = "Albert"
+
+puts einstein.name
+
+einstein.run
+
+puts einstein.name + " says " + einstein.act_smart
+
+
+# ----- POLYMORPHISM -----
+class Bird
+  def tweet(bird_type)
+    bird_type.tweet
+  end
+end
+
+class Cardinal < Bird
+  def tweet
+    puts "Tweet... tweet.."
+  end
+end
+
+class Parrot < Bird
+  def tweet
+    puts "Squaawwkk..."
+  end
+end
+
+generic_bird = Bird.new
+generic_bird.tweet(Cardinal.new)
+generic_bird.tweet(Parrot.new)
+
+# ------ SYMBOL ------
+:derek
+
+puts :derek
+puts :derek.to_s
+puts :derek.class
+puts :derek.object_id
+
+# ------- ARRAY -------
+
+array_1 = Array.new
+array_2 = Array.new(5) #nil value
+array_3 = Array.new(5, "empty") #empty value
+array_4 = [1, "two", 3, 5.5] #store multi object types
+
+puts array_1
+puts array_2
+puts array_3
+puts array_4
+puts array_4[2]
+
+puts array_4[1,3].join(", ")
+
+puts array_4.values_at(0,1,3).join(", ")
+
+#add 0 at the begining
+array_4.unshift(0) 
+puts array_4.join(", ")
+
+#remove first item
+array_4.shift()
+puts array_4.join(", ")
+
+
+#add 100 and 200 to the end
+array_4.push(100, 200)
+puts array_4.join(", ")
+
+#remove last item
+array_4.pop
+puts array_4.join(", ")
+
+#add array into array
+array_4.concat(["uye", 60, 80])
+puts array_4.join(", ")
+
+#array method
+puts "Array Size: " + array_4.size.to_s
+puts "Array Contain 100: " + array_4.include?(100).to_s
+puts "How Many 100?: " + array_4.count(100).to_s
+puts "Array Empty: " + array_4.empty?.to_s
+
+#print array
+p array_4
+
+#output array in loop
+array_4.each do |val|
+  puts val
+end
+
+# ----------------- HASH --------------------
+
+#has is a collection objects in pairs
+number_hash = { "PI" => 3.14, 
+                "Golden" => 1.618, 
+                "e" => 2.718 }
+puts number_hash["PI"]
+
+superheroes = Hash["Clark Kent", "Superman", "Bruce Wayne", "Batman"]
+puts superheroes["Bruce Wayne"]
+
+#Add to a hash
+superheroes["Barry Allen"] = "Flash"
+puts superheroes["Barry Allen"]
+
+#set a default key value
+samp_hash =  Hash.new("No such key..")
+puts samp_hash["Dog"]
+
+superheroines = Hash["Lisa Morel", "Aquagirl", "Betty Kane", "Batgirl"]
+
+#combine 2 hashes
+
+#superheroes.merge -> no overwritting
+superheroes.update(superheroines)
+
+#print value
+superheroes.each { |key, value| puts key.to_s + ' : ' + value }
+
+puts "Has Key Lisa Morel: " + superheroes.has_key?("Lisa Morel").to_s
+puts "Has Value Batman: " + superheroes.has_value?("Batman").to_s
+puts "Is Hash Empty: " + superheroes.empty?.to_s
+puts "Size of Hash: " + superheroes.size.to_s
+
+#delete key value
+superheroes.delete("Barry Allen")
+
+puts "Size of Hash now: " + superheroes.size.to_s
+               
+
+
+# ------- Enumerable ------
+
+#class that include the Enumerable module gain collection capabilites
+
+class Menu
+  include Enumerable
+  
+  #each provides items one at a time
+  def each
+    yield "pizza"
+    yield "spagheti"
+    yield "salad"
+    yield "bread"
+    yield "water"
+  end
+end
+
+menu_options = Menu.new
+
+#cycle through all the options
+menu_options.each { |item| puts "would you like: #{item}" }
+
+#check if we have pizza
+p menu_options.find { |item| item == "pizza" }
+
+#return items 5 letters in length
+p menu_options.select { |item| item.size <= 5 }
+
+#return items that meet the criteria
+p menu_options.reject { |item| item.size <= 5 }
+
+#return the first item
+p menu_options.first
+
+#return first 2
+p menu_options.take(2)
+
+#return ^first 2
+p menu_options.drop(2)
+
+#return min item
+p menu_options.min
+
+#return max item
+p menu_options.max
+
+#sort the items
+p menu_options.sort
+
+#return each item in reverse order
+menu_options.reverse_each { |item| puts item}
+
+=end
+
+# ------ FILE I/O ------
+
+#create a file for writting
+
+file = File.new("authors.out", "w")
+
+#add lines
+file.puts "william Shakespeare"
+file.puts "Agatha Christie"
+file.puts "Barbara Cartland"
+
+#close file
+file.close
+
+#output everything in the file
+puts File.read("authors.out")
+
+#open file for appending
+file = File.new("authors.out", "a")
+file.puts "Danielle Steel"
+file.close
+puts File.read("authors.out")
+
+#create another file 
+file = File.new("author_info.out", "w")
+file.puts "William Shakespeare,English,plays and poetry,4 billion"
+file.puts "Agatha Christie,English,who done its,4 billion"
+file.puts "Barbara Cartland,English,romance novels,1 billion"
+file.puts "Danielle Steel,English,romance novels,800 million"
+file.close
+
+#cycle through the data
+File.open("author_info.out") do |record|
+  record.each do |item|
+    
+    #split with comas
+    name, lang, speciality, sales = item.chomp.split(',')
+    puts "#{name} was an #{lang} author that specialized in #{speciality}. They sold over #{sales} books."
+  end
+end
